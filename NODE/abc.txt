@@ -1,0 +1,7 @@
+ey! Welcome to my Beginner JavaScript Notes + Reference.
+
+These notes are a free resource, based on my Beginner JavaScript Video course . They can be used as a stand alone guide, along with the videos or a quick reference for all the different parts of JavaScript like the different ways to declare a function.
+
+The code written in these notes is available in the Beginner JavaScript repo on github.
+
+Did I miss something? Think you could add a better example? Find a spelling mistake? All the notes are open source and edits are greatly appreciated!
