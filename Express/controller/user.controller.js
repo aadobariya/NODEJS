@@ -1,41 +1,80 @@
-const users = require("../public/user.json");
+const User = require('../model/user.model');
+const bcrypt = require('bcrypt');
 
-exports.adduser = (req, res) => {
-  const user = req.body;
-  users.push(user);
-  res.status(201).json({ message: " user added successfully" });
+exports.addUser = async (req, res) => {
+    try {
+        const {firstName, lastName, email, password, age} =req.body;
+        // console.log(req.body);
+        let hashPassword = await bcrypt.hash(password,10);
+        // console.log(hashPassword);
+        let newUser = await User.create({
+            firstName,
+            lastName,
+            email,
+            password: hashPassword,
+            age
+        });
+        newUser.save();
+        res.status(201).json({user: newUser,message:'user added successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
 };
 
-exports.getAllusers = (req, res) => {
-  res.status(200).json(users);
+exports.getAllUsers = async (req, res) => {
+    try {
+        let users = await User.find({ isDelete: false });
+        res.status(200).json(users);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
 };
 
-exports.getuser = (req, res) => {
-  const id = +req.query.id;
-  let user = users.find((item) => item.id === id);
-  res.status(200).json(user);
+exports.getUser= async (req, res) => {
+    try {
+        let userId = req.query.userId;
+        let user = await User.findOne({_id:userId, isDelete:false});
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
 };
 
-exports.repalceuser = (req, res) => {
-  const id = +req.query.id;
-  let userIndex = users.findIndex((item) => item.id === id);
-  let user = users[userIndex];
-  users.splice(userIndex, 1, { ...req.body });
-  res.status(200).json({ message: "user replace successfully...." });
+exports.updateUser = async (req, res) => {
+    try {
+        let userId = req.query.userId;
+        let user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        user = await User.findByIdAndUpdate(user._id, {$set: {...req.body} },{ new: true });
+        // user = await User.findByOneAndUpdate({_id:user._id}, { $set: {...req.body} },{ new: true });
+        res.status(200).json({user, message:'User updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
 };
 
-exports.updateuser = (req, res) => {
-  const id = +req.query.id;
-  let userIndex = users.findIndex((item) => item.id === id);
-  let user = users[userIndex];
-  let item = users.splice(userIndex, 1, { ...user, ...req.body });
-  res.status(200).json({ message: "user update successfully...." });
-};
 
-exports.deleteuser = (req, res) => {
-  const id = +req.query.id;
-  let userIndex = users.findIndex((item) => item.id === id);
-  let user = users[userIndex];
-  let item = users.splice(userIndex, 1);
-  res.status(200).json({ message: "user delete successfully...." });
+exports.deleteUser = async (req, res) => {
+    try {
+        let userId = req.query.userId;
+        let user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        // user = await User.findByIdAndDelete(user._id);
+        user = await User.findOneAndUpdate({_id:user._id}, {isDelete:true}, {new:true});
+        res.status(200).json({user, message:'User Deleted successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
 };
