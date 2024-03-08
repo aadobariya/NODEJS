@@ -23,10 +23,11 @@ app.use(morgan('dev'));
 // const userRoutes = require('./routes/task.routes');
 // app.use('/task' , userRoutes);
 
-// const userRoutes = require('./routes/user.routes');
-// app.use('/api/user' , userRoutes);
-const prod1Routes = require('./routes/prod1.routes');
-app.use('/api/prod1' , prod1Routes);
+const userRoutes = require('./routes/user.routes');
+app.use('/api/user' , userRoutes);
+
+// const prod1Routes = require('./routes/prod1.routes');
+// app.use('/api/prod1' , prod1Routes);
 
 
 app.listen(port, () => {

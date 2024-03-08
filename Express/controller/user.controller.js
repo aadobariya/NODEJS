@@ -1,26 +1,69 @@
 const User = require('../model/user.model');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-exports.addUser = async (req, res) => {
+exports.registerUser = async (req,res) => {
     try {
-        const {firstName, lastName, email, password, age} =req.body;
-        // console.log(req.body);
+        const {firstName, lastname,  email, password, age} =req.body;
+        let user = await User.findOne({email: email, isDelete: false});
+        if(user){
+            return res.status(400).json({ message: 'user is already registered....'});
+        }
         let hashPassword = await bcrypt.hash(password,10);
-        // console.log(hashPassword);
-        let newUser = await User.create({
+        user = await User.create({
             firstName,
-            lastName,
+            lastname,
             email,
             password: hashPassword,
             age
         });
-        newUser.save();
-        res.status(201).json({user: newUser,message:'user added successfully'});
+        user.save();
+        res.status(201).json({user: user,message:'New user is Added'})
     } catch (error) {
         console.log(error);
         res.status(500).json({message:'Internal server Error'});
     }
-};
+}
+
+
+exports.loginUser = async (req,res) => {
+    try {
+        let user = await User.findOne({email: req.body.email, isDelete: false});
+        if(!user){
+            return res.status(400).json({ message: 'user is noy found'});
+        }
+        let chaekpassword = await bcrypt.compare(req.body.password, user.password);
+        if(!chaekpassword){
+            return res.status(400).json({ message: 'password is not match...'});
+        }
+        let token = jwt.sign({ userId: user._id},"SkillQode");
+        res.status(200).json({ token, message:" Login Successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'Internal server Error'});
+    }
+}
+
+
+// exports.addUser = async (req, res) => {
+//     try {
+//         const {firstName, lastName, email, password, age} =req.body;
+//         // console.log(req.body);
+//         let hashPassword = await bcrypt.hash(password,10);
+//         // console.log(hashPassword);
+//         let newUser = await User.create({
+//             firstName,
+//             lastName,
+//             email,
+//             password: hashPassword,
+//             age
+//         });
+//         ;
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({message:'Internal server Error'});
+//     }
+// };
 
 exports.getAllUsers = async (req, res) => {
     try {
