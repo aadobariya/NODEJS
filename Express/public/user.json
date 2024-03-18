@@ -8,6 +8,7 @@
         "street": "Kulas Light",
         "suite": "Apt. 556",
         "city": "Gwenborough",
+        "zipcode": "90566-7771",
         "zipcode": "92998-3874",
         "geo": {
           "lat": "-37.3159",
@@ -31,7 +32,6 @@
         "street": "Victor Plains",
         "suite": "Suite 879",
         "city": "Wisokyburgh",
-        "zipcode": "90566-7771",
         "geo": {
           "lat": "-43.9509",
           "lng": "-34.4618"

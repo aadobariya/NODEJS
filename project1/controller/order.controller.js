@@ -4,7 +4,8 @@ const order = require('../model/order.model');
 
 exports.newOrder = async (req, res) => {
     try {
-       let cartItems = await cart.find({user: req.user._id, isDelete: false}).populate('cartItem');
+       let cartItems = await Cart.find({user: req.user._id, isDelete: false}).populate('cartItem');
+       console.log(cartItems);
        let orderItems = cartItems.map(item => ({
             product: item.cartItem._id,
             quantity : item.quantity,
@@ -14,10 +15,10 @@ exports.newOrder = async (req, res) => {
        let newOrder = await order.create({
         user: req.user._id,
         items: orderItems,
-        totalPrice: totalPrice
+        totalAmount: totalPrice
        });
        newOrder.save();
-       await Cart.updateMany({ user : req.user._id},{ $set:{isDelete: false}});
+    //    await Cart.updateMany({ user : req.user._id},{ $set:{isDelete: false}});
        res.status(201).json( {order: newOrder, messageg: 'Order updated successfully'}); 
     } catch (error) {
         console.log(error);

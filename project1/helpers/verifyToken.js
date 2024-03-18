@@ -10,11 +10,11 @@ exports.verifyToken = async (req, res, next) => {
         if(token === undefined)
            return res.status(401).json({meassage : 'unauthorization'});
         else{
-            let {userId} = jwt.verify(token,'harsh');
+            let {userId} = jwt.verify(token,'a');
             let user = await User.findById(userId);
             if(user){
                 req.user = user;
-                next();
+                next(); 
             }else{
                 return res.status(401).json({meassage : 'invalid user'});
             

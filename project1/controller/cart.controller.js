@@ -2,20 +2,21 @@ const Cart = require('../model/cart.model');
 
 exports.addToCart = async (req, res) => {
     try {
-        let cart = await Cart.findOne({
+        let cartItems = await Cart.findOne({
             user : req.user._id,
             cartItem : req.body.cartItem,
             isDelete: false
         });
-        if(cart){
+        console.log(cartItems);
+        if(cartItems){
             return res.json({message: 'cart already exist...'});
         }
-        cart = await Cart.create({
+        cartItems = await Cart.create({
             user: req.user._id,
             ...req.body
         });
-        cart.save();
-        res.json({cart ,message: 'cart added..'});
+        cartItems.save();
+        res.json({cartItems ,message: 'cart added..'});
     } catch (error) {
         console.log(error);
         res.status(500).json({message: 'internel server error'});

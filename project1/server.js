@@ -28,7 +28,7 @@ app.use("/api/cart", cartRoutes);
 
 const orderRoutes = require('./routes/order.routes');
 app.use("/api/order", orderRoutes);
-console.log("okkk");
+
 app.listen(port,()=>{
-    console.log('Server is running on port 2222');
+    console.log('Server is running on port 3333');
 });

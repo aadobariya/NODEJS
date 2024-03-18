@@ -36,7 +36,7 @@ exports.loginUser = async (req, res) => {
         if (!checkPassword) {
             return res.status(400) .json({ message:'Invalid Password..!'})
     }
-    let token = jwt.sign({userId: user._id},'harsh');
+    let token = jwt.sign({userId: user._id},'a');
     res.status(200).json({token,message: 'login successfully'});
 } 
 catch (error) {
@@ -55,7 +55,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-exports.getusers =  async (req , res ) => {
+exports.getuser =  async (req , res ) => {
     try{
         let userId = req.user._id;
         let user = await User.findOne({_id: userId, isDelete : false});
