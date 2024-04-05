@@ -99,4 +99,26 @@ exports.deleteUser =  async (req,res)=>{
    }
 };
 
-
+exports.addNewUser = async (req , res) => {
+    try{
+        const { firstName, lastName , email , password , age, gender, profileImage} = req.body;
+        let user = await User.findOne({email: email, isDelete : false});
+        if(user){
+            return res.status(400).json({message: 'user already exist...'});
+        }
+        if(req.file){
+            // console.log(req.file);
+            profileImage = req.file.path.replace(/\\/g,"/");
+        }
+        user = await User.create ({
+            ...req.body,
+            profileImage
+        });
+        console.log(user);
+        user.save();
+        return res.status(201).json(user);
+    } catch (err){
+        console.log(err);
+        res.status(500).json({message: 'Something went wrong...'});
+    }
+}

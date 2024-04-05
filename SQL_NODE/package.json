@@ -1,0 +1,20 @@
+{
+  "name": "sql_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev":"nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.9.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
